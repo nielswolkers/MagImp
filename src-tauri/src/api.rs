@@ -2,7 +2,7 @@ use crate::auth::{self, Tokens};
 use crate::GradeRow;
 use reqwest::StatusCode;
 use serde_json::Value;
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::time::Duration;
 
 const MAX_NETWORK_RETRIES: u32 = 3;
 
@@ -18,21 +18,6 @@ fn s(v: &Value) -> Option<String> {
         Value::Number(n) => Some(n.to_string()),
         _ => None,
     }
-}
-
-fn today() -> String {
-    // yyyy-mm-dd from unix days (civil-from-days algorithm)
-    let days = (SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() / 86400) as i64;
-    let z = days + 719468;
-    let era = z.div_euclid(146097);
-    let doe = z - era * 146097;
-    let yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365;
-    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
-    let mp = (5 * doy + 2) / 153;
-    let d = doy - (153 * mp + 2) / 5 + 1;
-    let m = if mp < 10 { mp + 3 } else { mp - 9 };
-    let y = yoe + era * 400 + if m <= 2 { 1 } else { 0 };
-    format!("{y:04}-{m:02}-{d:02}")
 }
 
 impl MagisterClient {
@@ -99,15 +84,8 @@ impl MagisterClient {
         if items.is_empty() {
             return Err("No school years found".into());
         }
-        // Gemairo default: the year containing today, else the most recent one.
-        let now = today();
-        let date = |v: &Value, k: &str| v[k].as_str().unwrap_or("").chars().take(10).collect::<String>();
-        let year = items
-            .iter()
-            .find(|y| date(y, "begin") <= now && now <= date(y, "einde"))
-            .or_else(|| items.iter().max_by_key(|y| date(y, "einde")))
-            .unwrap()
-            .clone();
+        // Gemairo default: first school year in the returned list.
+        let year = items[0].clone();
         let yid = year["id"].as_i64().ok_or("School year without id")?;
         let end = year["einde"].as_str().unwrap_or("").to_string();
 
