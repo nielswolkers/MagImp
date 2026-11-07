@@ -28,3 +28,5 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+- Desktop shell is Tauri 2 in `src-tauri`; all Magister auth and API calls run in Rust (the browser cannot intercept the m6loapp:// redirect).
