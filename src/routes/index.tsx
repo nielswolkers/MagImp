@@ -188,7 +188,13 @@ function Index() {
               {grouped.length === 0 && <p className="px-7 py-12 text-center text-sm text-[#929bad]">{search ? "No grades match your search." : "No grades found for this school year."}</p>}
               {grouped.map(([course, courseRows]) => (
                 <div key={course}>
-                  <div className="flex items-center justify-between bg-[#fafbfc] px-5 py-3.5 md:px-7"><h3 className="text-sm font-semibold text-[#39445a]">{course}</h3><span className="text-[11px] font-medium text-[#929bad]">{courseRows.length} grades</span></div>
+                  <div className="flex items-center justify-between gap-3 bg-[#fafbfc] px-5 py-3.5 md:px-7">
+                    <div className="min-w-0"><h3 className="truncate text-sm font-semibold text-[#39445a]">{course}</h3><span className="mt-0.5 block text-[11px] font-medium text-[#929bad]">{courseRows.length} cijfers</span></div>
+                    <div className="flex shrink-0 items-center gap-3">
+                      <span className="text-[10px] font-medium uppercase tracking-wide text-[#9aa3b2]">Magister-gem.</span>
+                      {(() => { const average = year?.course_averages.find((item) => item.course === course)?.average; const value = average ? numericGrade(average) : null; return <span className={`inline-flex min-w-[44px] justify-center rounded-full border px-2.5 py-1.5 text-xs font-semibold tabular-nums ${value === null ? "border-[#e8ebf2] bg-white text-[#929bad]" : value >= 5.5 ? "border-[#dcebe1] bg-[#edf7f0] text-[#438363]" : "border-[#f1dfdc] bg-[#fff1ef] text-[#c45b49]"}`}>{average ?? "—"}</span>; })()}
+                    </div>
+                  </div>
                   <div className="overflow-x-auto">
                     <table className="w-full min-w-[540px] text-left text-sm">
                       <thead className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#9aa3b2]"><tr><th className="px-7 py-2.5">Test / assignment</th><th className="px-5 py-2.5">Grade</th><th className="px-7 py-2.5 text-right">Weight</th></tr></thead>
