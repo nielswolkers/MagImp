@@ -159,6 +159,7 @@ impl MagisterClient {
         let (ver_json, lesson_json) = tokio::join!(self.get_json(&ver_url), self.get_json(&lessons_url));
         let ver = ver_json.map(|v| items(&v)).unwrap_or_default();
         let lessons = lesson_json.map(|v| items(&v)).unwrap_or_default();
+        if ver.is_empty() { return Ok(AttendanceSummary::default()); }
         let total = if lessons.is_empty() { ver.len() } else { lessons.len() };
         let mut absent = 0usize;
         let mut sick = 0usize;
