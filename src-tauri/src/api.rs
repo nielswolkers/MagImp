@@ -151,7 +151,8 @@ impl MagisterClient {
     async fn fetch_attendance(&mut self, pid: i64, begin: &str, end: &str) -> Result<AttendanceSummary, String> {
         let b = self.base.clone();
         let today = chrono::Utc::now().format("%Y-%m-%d").to_string();
-        let until = if today < date_only(end) { today.as_str() } else { date_only(end).as_str() }.to_string();
+        let end_date = date_only(end);
+        let until = if today < end_date { today } else { end_date };
         let from = date_only(begin);
         let ver_url = format!("{b}/api/m6/leerlingen/{pid}/verantwoordingen?begin={from}&einde={until}");
         let lessons_url = format!("{b}/api/leerlingen/{pid}/afspraken?status=actief&begin={from}&einde={until}");
