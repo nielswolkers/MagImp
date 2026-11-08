@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Magister Grades",
+  "productName": "MagImp",
   "version": "0.1.0",
-  "identifier": "app.magistergrades.desktop",
+  "identifier": "app.magimp.desktop",
   "build": {
     "devUrl": "http://localhost:5173",
     "beforeDevCommand": "bun run dev",
@@ -11,7 +11,7 @@
   },
   "app": {
     "windows": [
-      { "label": "main", "title": "Magister Grades", "width": 960, "height": 720 }
+      { "label": "main", "title": "MagImp", "width": 960, "height": 720 }
     ],
     "security": { "csp": null }
   },
