@@ -112,7 +112,16 @@ impl MagisterClient {
             let begin = first_string(&[s(&year["begin"]), s(&year["Begin"])]);
             let end = first_string(&[s(&year["einde"]), s(&year["Einde"])]);
             if begin.is_empty() || end.is_empty() { continue; }
-            let label = format!("{}–{}", begin.get(0..4).unwrap_or(""), end.get(0..4).unwrap_or(""));
+            let period_label = format!("{}–{}", begin.get(0..4).unwrap_or(""), end.get(0..4).unwrap_or(""));
+            // Use Magister enrollment metadata to show the actual class/group.
+            let class_label = first_string(&[
+                s(&year["Groep"]["Omschrijving"]), s(&year["Groep"]["omschrijving"]),
+                s(&year["groep"]["Omschrijving"]), s(&year["groep"]["omschrijving"]),
+                s(&year["Lesgroep"]["Omschrijving"]), s(&year["lesgroep"]["Omschrijving"]),
+                s(&year["Type"]["Omschrijving"]), s(&year["type"]["Omschrijving"]),
+                s(&year["Opleiding"]["Omschrijving"]),
+            ]);
+            let label = if class_label.is_empty() { period_label } else { format!("{class_label} · {period_label}") };
             let grade_url = format!("{b}/api/personen/{pid}/aanmeldingen/{yid}/cijfers/cijferoverzichtvooraanmelding?actievePerioden=false&alleenBerekendeKolommen=false&alleenPTAKolommen=false&peildatum={end}");
             let grades_json = self.get_json(&grade_url).await?;
             let all = items(&grades_json);
