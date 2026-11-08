@@ -132,15 +132,12 @@ impl MagisterClient {
 
             // Gemairo's grade translation uses the grade row and nested column first.
             // The extra-info endpoint supplements missing labels/weights only.
-            let extra = if col != 0 {
-                self.get_json(&format!(
+            let extra = self
+                .get_json(&format!(
                     "{b}/api/personen/{pid}/aanmeldingen/{yid}/cijfers/extracijferkolominfo/{col}"
                 ))
                 .await
-                .unwrap_or(Value::Null)
-            } else {
-                Value::Null
-            };
+                .map_err(|e| format!("Could not fetch details for grade column {col}: {e}"))?;
 
             let vak = &g["Vak"];
             let title = first_string(&[
@@ -152,9 +149,8 @@ impl MagisterClient {
             ]);
             let weight = first_string(&[
                 s(&g["kolom"]["weegfactor"]),
-                s(&g["CijferKolom"]["Weging"]),
-                s(&g["weegfactor"]),
                 s(&extra["Weging"]),
+                s(&g["weegfactor"]),
             ]);
 
             rows.push(GradeRow {
