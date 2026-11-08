@@ -143,7 +143,6 @@ impl MagisterClient {
             let title = first_string(&[
                 s(&g["omschrijving"]),
                 s(&g["kolom"]["omschrijving"]),
-                s(&g["CijferKolom"]["KolomOmschrijving"]),
                 s(&extra["WerkInformatieOmschrijving"]),
                 s(&extra["KolomOmschrijving"]),
             ]);
