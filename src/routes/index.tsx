@@ -69,9 +69,9 @@ function Index() {
   const attendance = year?.attendance;
   return (
     <div className="min-h-screen bg-[#f7f8f7] pb-24 text-[#18231f]">
-      <main className="mx-auto w-full max-w-[520px] px-5 pb-8 pt-7 sm:px-7">
+      <main className="mx-auto w-full max-w-[1440px] px-6 pb-12 pt-8 lg:px-10">
         <header className="mb-7 flex items-center justify-between">
-          <div><p className="text-[23px] font-semibold tracking-[-.04em]">Cijfers</p><p className="mt-1 text-xs text-[#8b968f]">{year?.label ?? "Schooljaar"}</p></div>
+          <div><p className="text-[30px] font-semibold tracking-[-.045em]">Cijfers</p><p className="mt-1 text-xs text-[#8b968f]">{year?.label ?? "Schooljaar"}</p></div>
           <button aria-label="Refresh grades" onClick={login} disabled={loading} className="flex h-10 w-10 items-center justify-center rounded-full border border-[#e8ede9] bg-white text-[#789383] shadow-[0_2px_8px_rgba(30,55,40,.04)] disabled:opacity-50"><RefreshCw size={16} className={loading ? "animate-spin" : ""} /></button>
         </header>
 
@@ -82,20 +82,21 @@ function Index() {
         <section className="rounded-[22px] border border-[#e9eeea] bg-white px-4 pb-3 pt-4 shadow-[0_3px_16px_rgba(32,57,42,.035)]">
           <h2 className="mb-1 text-sm font-medium text-[#35443b]">Overzicht per vak</h2>
           <p className="mb-1 text-[10px] text-[#a0aaa3]">Gemiddelde volgens Magister</p>
-          {chartData.length ? <div className="h-[164px] w-full">
+          {chartData.length ? <div className="h-[290px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} margin={{ top: 7, right: 1, left: -23, bottom: 35 }}>
+              <BarChart data={chartData} margin={{ top: 12, right: 20, left: -10, bottom: 55 }}>
                 <CartesianGrid strokeDasharray="2 3" vertical={false} stroke="#edf1ee" />
-                <XAxis dataKey="course" interval={0} angle={-42} textAnchor="end" height={49} tick={{ fontSize: 8, fill: "#859188" }} axisLine={false} tickLine={false} />
+                <XAxis dataKey="course" interval={0} angle={-32} textAnchor="end" height={68} tick={{ fontSize: 11, fill: "#859188" }} axisLine={false} tickLine={false} />
                 <YAxis domain={[0, 10]} ticks={[0, 2, 4, 6, 8, 10]} tick={{ fontSize: 8, fill: "#9aa59d" }} axisLine={false} tickLine={false} />
                 <Tooltip formatter={(value) => [String(value).replace(".", ","), "Gemiddelde"]} contentStyle={{ borderRadius: 10, border: "1px solid #e8eee9", fontSize: 11 }} />
-                <Bar dataKey="average" fill="#78a58d" radius={[5, 5, 0, 0]} maxBarSize={25} />
+                <Bar dataKey="average" fill="#78a58d" radius={[5, 5, 0, 0]} maxBarSize={54} />
               </BarChart>
             </ResponsiveContainer>
           </div> : <p className="py-12 text-center text-xs text-[#9aa59d]">Geen officiële gemiddelden ontvangen van Magister.</p>}
         </section>
 
-        <section className="mt-7">
+        <div className="mt-7 grid grid-cols-1 gap-7 xl:grid-cols-[minmax(0,1.65fr)_minmax(320px,1fr)]">
+        <section>
           <div className="mb-3 flex items-center justify-between"><h2 className="text-sm font-semibold text-[#35443b]">Per vak</h2><span className="text-[10px] text-[#a0aaa3]">{grouped.length} vakken</span></div>
           <div className="overflow-hidden rounded-[20px] border border-[#e9eeea] bg-white shadow-[0_3px_16px_rgba(32,57,42,.035)]">
             {grouped.length === 0 && <p className="px-5 py-9 text-center text-xs text-[#9aa59d]">Geen cijfers gevonden voor dit schooljaar.</p>}
@@ -119,7 +120,7 @@ function Index() {
           </div>
         </section>
 
-        <section className="mt-7 rounded-[20px] border border-[#e9eeea] bg-white p-4 shadow-[0_3px_16px_rgba(32,57,42,.035)]">
+        <section className="rounded-[20px] border border-[#e9eeea] bg-white p-5 shadow-[0_3px_16px_rgba(32,57,42,.035)]">
           <div className="mb-4"><h2 className="text-sm font-semibold text-[#35443b]">Aanwezigheid</h2><p className="mt-1 text-[10px] text-[#9aa59d]">Dit schooljaar</p></div>
           {attendance && attendance.total_lessons > 0 ? <>
             <div className="flex items-end justify-between"><div><p className="text-[32px] font-semibold tracking-tight text-[#5f9277] tabular-nums">{attendance.percentage}<span className="text-base">%</span></p><p className="text-[10px] text-[#9aa59d]">Aanwezig</p></div><p className="text-[10px] text-[#9aa59d]">{attendance.present} van {attendance.total_lessons - attendance.excused} lessen</p></div>
@@ -132,11 +133,12 @@ function Index() {
             </div>
           </> : <p className="py-5 text-center text-xs text-[#9aa59d]">Geen aanwezigheidsgegevens ontvangen.</p>}
         </section>
+        </div>
         {error && <p className="mt-4 rounded-xl bg-red-50 p-3 text-xs text-red-700">{error}</p>}
       </main>
 
-      <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-[#e9eeea] bg-white/95 px-2 pb-[max(9px,env(safe-area-inset-bottom))] pt-2 backdrop-blur">
-        <div className="mx-auto grid max-w-[520px] grid-cols-5">
+      <nav className="mt-10 border-t border-[#e9eeea] bg-white px-6 py-3">
+        <div className="mx-auto grid max-w-[1440px] grid-cols-5">
           <NavItem icon={<CalendarDays size={17}/>} label="Agenda"/>
           <NavItem icon={<Clock3 size={17}/>} label="Studie"/>
           <NavItem icon={<ChartNoAxesColumn size={18}/>} label="Cijfers" active/>
