@@ -32,11 +32,14 @@ fn text<'a>(v: &'a Value, keys: &[&str]) -> Option<&'a Value> {
     })
 }
 fn is_average(g: &Value) -> bool {
+    // Magister's documented/internal enum: 1 = individual grade, 2 = average.
+    // Gemairo maps GradeType._type === 2 to "average".
     let kind = first_string(&[
         s(&g["kolom"]["type"]), s(&g["type"]), s(&g["CijferKolom"]["KolomOmschrijving"]),
-        s(&g["CijferKolom"]["KolomOmschrijving"]),
     ]).to_lowercase();
-    kind.contains("gemmiddelde") || kind.contains("gemiddelde") || kind == "average"
+    g["CijferKolom"]["KolomSoort"].as_i64() == Some(2)
+        || kind.contains("gemiddelde")
+        || kind == "average"
 }
 fn course_name(g: &Value) -> String {
     let vak = &g["Vak"];
