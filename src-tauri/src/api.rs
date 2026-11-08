@@ -121,9 +121,9 @@ impl MagisterClient {
                 let value = grade_string(g);
                 if is_average(g) && !course.is_empty() && !value.is_empty() {
                     if let Some(existing) = averages.iter_mut().find(|a| a.course == course) {
-                        existing.average = value;
+                        existing.average = value.clone();
                     } else {
-                        averages.push(CourseAverage { course: course.clone(), average: value });
+                        averages.push(CourseAverage { course: course.clone(), average: value.clone() });
                     }
                 }
                 if g["CijferKolom"]["KolomSoort"].as_i64() != Some(1) { continue; }
