@@ -16,7 +16,7 @@ type GradeRow = { course: string; title: string; grade: string; weight: string }
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Magister Grades" },
+      { title: "MagImp" },
       { name: "description", content: "Your grades, clearly organised." },
     ],
   }),
@@ -42,7 +42,7 @@ function Index() {
     setError(null);
     try {
       const { invoke, isTauri } = await import("@tauri-apps/api/core");
-      if (!isTauri()) throw new Error("Open this in the Magister Grades desktop app to log in.");
+      if (!isTauri()) throw new Error("Open this in the MagImp desktop app to log in.");
       setRows(await invoke<GradeRow[]>("magister_login_and_fetch"));
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -82,7 +82,7 @@ function Index() {
             <GraduationCap size={28} strokeWidth={1.8} />
           </div>
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#5570b8]">Your academic overview</p>
-          <h1 className="text-4xl font-semibold tracking-tight text-[#172033]">Magister Grades</h1>
+          <h1 className="text-4xl font-semibold tracking-tight text-[#172033]">MagImp</h1>
           <p className="mt-4 max-w-sm text-[15px] leading-7 text-[#6d7689]">
             All your results in one clear view. Connect to Magister to see your grades, subjects and progress.
           </p>
@@ -109,7 +109,7 @@ function Index() {
             <GraduationCap size={22} />
           </div>
           <div>
-            <p className="text-[15px] font-bold tracking-tight">Magister Grades</p>
+            <p className="text-[15px] font-bold tracking-tight">MagImp</p>
             <p className="text-[11px] text-[#929bad]">STUDENT DASHBOARD</p>
           </div>
         </div>
@@ -208,7 +208,7 @@ function Index() {
             </div>
           </section>
           {error && <p className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
-          <p className="mt-6 text-center text-[11px] text-[#a4abba]">Magister Grades · Your results, at a glance</p>
+          <p className="mt-6 text-center text-[11px] text-[#a4abba]">MagImp · Your results, at a glance</p>
         </div>
       </main>
     </div>
