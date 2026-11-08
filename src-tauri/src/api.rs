@@ -156,7 +156,8 @@ impl MagisterClient {
         let from = date_only(begin);
         let ver_url = format!("{b}/api/m6/leerlingen/{pid}/verantwoordingen?begin={from}&einde={until}");
         let lessons_url = format!("{b}/api/leerlingen/{pid}/afspraken?status=actief&begin={from}&einde={until}");
-        let (ver_json, lesson_json) = tokio::join!(self.get_json(&ver_url), self.get_json(&lessons_url));
+        let ver_json = self.get_json(&ver_url).await;
+        let lesson_json = self.get_json(&lessons_url).await;
         let ver = ver_json.map(|v| items(&v)).unwrap_or_default();
         let lessons = lesson_json.map(|v| items(&v)).unwrap_or_default();
         if ver.is_empty() { return Ok(AttendanceSummary::default()); }
